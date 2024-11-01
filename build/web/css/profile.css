@@ -1,0 +1,83 @@
+.userinfo {
+    width: 100%;
+    margin-top: 40px;
+    padding: 0 18%;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+}
+
+.info-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.info-header .userimage {
+    transform: scale(2);
+}
+
+.info-header .username {
+    margin-top: 26px;
+    font-size: 18px;
+}
+
+.info-header .userblogcount {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.userdetails {
+    font-size: 16px;
+    display: flex;
+    padding-left: 50px; 
+    padding-right: 50px; 
+    cursor: default;
+}
+
+.useremail {
+    margin: 0 0 0 auto;
+}
+
+main {
+    margin-bottom: 50px;
+}
+
+.editprofile a {
+    padding: 8px 36px;
+    font-size: 14px;
+    border: none;
+    margin-right: 10px;
+    background-color: var(--text-l);
+    cursor: pointer;
+    color: var(--icon);
+    text-decoration: none;
+    transition: all 0.25s;
+}
+
+.editprofile a:hover {
+    background-color: #4a67a9;
+}
+
+.signout a {
+    padding: 8px 36px;
+    font-size: 14px;
+    margin-left: 10px;
+    border: none;
+    background-color: #aa0101;
+    cursor: pointer;
+    color: var(--icon);
+    text-decoration: none;
+    transition: all 0.25s;
+}
+
+.signout a i {
+    font-size: 18px;
+    position: relative;
+    right: -5px;
+}
+
+.signout a:hover {
+    background-color: #f00000;
+}

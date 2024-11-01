@@ -1,0 +1,53 @@
+main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.main-title {
+    color: #375393;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.card {
+    width: 32vw;
+    cursor: default;
+}
+
+.card form {
+    display: flex;
+    flex-direction: column;
+}
+
+.card form input {
+    padding: 8px 12px;
+    font-size: 15px;
+    margin-top: 4px;
+}
+
+.card form div {
+    cursor: text;
+}
+
+.card form .pwd {
+    margin-top: 16px;
+}
+
+.card form button {
+    width: 50%;
+    margin-top: 28px;
+    padding: 8px 12px;
+    align-self: center;
+    background-color: #4a67a9;
+    border: none;
+    color: var(--icon);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.card form button:hover {
+    background-color: #375393;
+}

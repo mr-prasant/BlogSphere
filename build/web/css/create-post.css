@@ -1,0 +1,74 @@
+main {
+    grid-template-columns: 1fr;
+}
+
+textarea {
+    resize: none;
+}
+
+.card {
+    margin-bottom: 40px;
+}
+
+#myForm {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content:right;
+}
+
+input {
+    width: 100%;
+    outline: none;
+    margin-bottom: 16px;
+    font-size: 16px;
+    padding: 8px 8px;
+    border: 1px solid #ababab;
+}
+
+#editor {
+    font-size: 20px !important;
+}
+
+#myForm button {
+    position: relative;
+    margin-left: auto;
+    padding: 6px 16px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    border-radius: 10px;
+    color: var(--icon);
+    background-color: var(--blue-fg);
+    border: 1.4px solid #545454;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+
+#myForm button:hover {
+    background-color: #4a67a9;
+}
+
+#myForm button i {
+    transition: all 0.3s;
+    animation: none;
+    width: 28px;
+    
+}
+
+#myForm button:hover i {
+    color: #ffd595;
+    animation: share ease-in infinite 0.3s;
+}
+
+@keyframes share {
+    0% {
+        font-size: 15px;
+    }
+
+    50% {
+        font-size: 17px;
+    }
+}
+
