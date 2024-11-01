@@ -1,0 +1,148 @@
+# HOW TO USE DATABASE
+
+# Tables in Oracle SQL
+
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+BLOGS                          TABLE
+COMMENTS                       TABLE
+LIKES                          TABLE
+USERS                          TABLE
+
+SQL> desc users;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ USEREMAIL                                 NOT NULL VARCHAR2(60)
+ USERNAME                                           VARCHAR2(30)
+ CONTACT                                            NUMBER(12)
+ PASSWORD                                           VARCHAR2(20)
+
+SQL> desc blogs;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BLOGID                                    NOT NULL VARCHAR2(20)
+ USEREMAIL                                          VARCHAR2(30)
+ TITLE                                              VARCHAR2(100)
+ CONTENT                                            VARCHAR2(4000)
+ TIME                                               DATE
+ CATEGORY                                           VARCHAR2(20)
+ USERNAME                                           VARCHAR2(30)
+ LIKE_COUNT                                         NUMBER
+ COMMENT_COUNT                                      NUMBER
+ VIEWS                                              NUMBER
+ MILLISECOND                                        NUMBER
+
+SQL> desc comments;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BLOGID                                             VARCHAR2(20)
+ USERID                                             VARCHAR2(30)
+ CONTENT                                            VARCHAR2(1000)
+ TIME                                               DATE
+ MILLISECOND                                        NUMBER
+
+SQL> desc likes;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BLOGID                                             VARCHAR2(20)
+ USERID                                             VARCHAR2(30)
+
+# Primary key
+CONSTRAINT_NAME                TABLE_NAME           C
+------------------------------ -------------------- -
+BLOGS_BLOGID_PK                BLOGS                P
+SYS_C007012                    USERS                P
+
+# Foreign Key
+CONSTRAINT_NAME                TABLE_NAME           C
+------------------------------ -------------------- -
+COMMENTS_USERID_FK             COMMENTS             R
+LIKES_USERID_FK                LIKES                R
+BLOGS_USEREMAIL_FK             BLOGS                R
+COMMENTS_BLOGID_FK             COMMENTS             R
+LIKES_BLOGID_FK                LIKES                R
+
+# All triggers
+
+TRIGGER_NAME                   TRIGGERING_EVENT     TABLE_NAME           STATUS
+------------------------------ -------------------- -------------------- ----------
+UPDATE_LIKE_COUNT_AFTER_DELETE DELETE               LIKES                ENABLED
+UPD_CMNT_CNT_DEL               DELETE               COMMENTS             ENABLED
+UPD_CMNT_CNT_INS               INSERT               COMMENTS             ENABLED
+UPDATE_LIKE_COUNT_AFTER_INSERT INSERT               LIKES                ENABLED
+
+# SQL Code
+-- Creating USERS table
+CREATE TABLE USERS (
+    USEREMAIL VARCHAR2(60) NOT NULL,
+    USERNAME VARCHAR2(30),
+    CONTACT NUMBER(12),
+    PASSWORD VARCHAR2(20),
+    CONSTRAINT pk_users PRIMARY KEY (USEREMAIL)
+);
+
+-- Creating BLOGS table
+CREATE TABLE BLOGS (
+    BLOGID VARCHAR2(20) NOT NULL,
+    USEREMAIL VARCHAR2(30),
+    TITLE VARCHAR2(100),
+    CONTENT VARCHAR2(4000),
+    TIME DATE,
+    CATEGORY VARCHAR2(20),
+    USERNAME VARCHAR2(30),
+    LIKE_COUNT NUMBER,
+    COMMENT_COUNT NUMBER,
+    VIEWS NUMBER,
+    MILLISECOND NUMBER,
+    CONSTRAINT pk_blogs PRIMARY KEY (BLOGID),
+    CONSTRAINT fk_blogs_users FOREIGN KEY (USEREMAIL) REFERENCES USERS(USEREMAIL)
+);
+
+-- Creating COMMENTS table
+CREATE TABLE COMMENTS (
+    BLOGID VARCHAR2(20),
+    USERID VARCHAR2(30),
+    CONTENT VARCHAR2(1000),
+    TIME DATE,
+    MILLISECOND NUMBER,
+    CONSTRAINT fk_comments_blogs FOREIGN KEY (BLOGID) REFERENCES BLOGS(BLOGID),
+    CONSTRAINT fk_comments_users FOREIGN KEY (USERID) REFERENCES USERS(USEREMAIL)
+);
+
+-- Creating LIKES table
+CREATE TABLE LIKES (
+    BLOGID VARCHAR2(20),
+    USERID VARCHAR2(30),
+    CONSTRAINT fk_likes_blogs FOREIGN KEY (BLOGID) REFERENCES BLOGS(BLOGID),
+    CONSTRAINT fk_likes_users FOREIGN KEY (USERID) REFERENCES USERS(USEREMAIL)
+);
+
+-- Creating primary key for USERS table
+ALTER TABLE USERS
+ADD CONSTRAINT pk_users PRIMARY KEY (USEREMAIL);
+
+-- Creating primary key for BLOGS table
+ALTER TABLE BLOGS
+ADD CONSTRAINT pk_blogs PRIMARY KEY (BLOGID);
+
+-- Creating foreign key in BLOGS referencing USERS
+ALTER TABLE BLOGS
+ADD CONSTRAINT fk_blogs_users FOREIGN KEY (USEREMAIL) REFERENCES USERS(USEREMAIL);
+
+-- Creating foreign key in COMMENTS referencing BLOGS
+ALTER TABLE COMMENTS
+ADD CONSTRAINT fk_comments_blogs FOREIGN KEY (BLOGID) REFERENCES BLOGS(BLOGID);
+
+-- Creating foreign key in COMMENTS referencing USERS
+ALTER TABLE COMMENTS
+ADD CONSTRAINT fk_comments_users FOREIGN KEY (USERID) REFERENCES USERS(USEREMAIL);
+
+-- Creating foreign key in LIKES referencing BLOGS
+ALTER TABLE LIKES
+ADD CONSTRAINT fk_likes_blogs FOREIGN KEY (BLOGID) REFERENCES BLOGS(BLOGID);
+
+-- Creating foreign key in LIKES referencing USERS
+ALTER TABLE LIKES
+ADD CONSTRAINT fk_likes_users FOREIGN KEY (USERID) REFERENCES USERS(USEREMAIL);
