@@ -22,9 +22,10 @@ public class DBUtil {
         if (con != null) return;
         
         try {
+            Class.forName("com.mysql.jdbc.Driver");
             con = DriverManager.getConnection(url, user, password);
             System.out.println("BlogSphere Connection Build");
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             System.out.println("Error in opening Connection!");
             ex.printStackTrace();
         }
