@@ -5,15 +5,22 @@
     </listener>
     <context-param>
         <param-name>url</param-name>
-        <param-value>jdbc:oracle:thin:@//localhost:1521/xe</param-value>
+        <!--<param-value>jdbc:oracle:thin:@//localhost:1521/xe</param-value>-->
+        <!--<param-value>jdbc:mysql://localhost:3306/blogsphere</param-value>-->        
+        <param-value>jdbc:mysql://myblogsph-server.mysql.database.azure.com:3306/blogsphere?useSSL=true</param-value>
+
     </context-param>
     <context-param>
         <param-name>username</param-name>
-        <param-value>blogsphere</param-value>
+        <!--<param-value>blogsphere</param-value>-->
+        <!--<param-value>root</param-value>--> 
+        <param-value>blogs</param-value>
     </context-param>
     <context-param>
         <param-name>password</param-name>
-        <param-value>project</param-value>
+        <!--<param-value>project</param-value>-->
+        <!--<param-value>2507</param-value>--> 
+        <param-value>Project@250701</param-value>
     </context-param>
     <servlet>
         <servlet-name>SignInServlet</servlet-name>
