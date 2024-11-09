@@ -1,0 +1,152 @@
+For using it in MYSQL (Make sure to add the MYSQL Connctors in Libraries and changes in the web.xml and DBUtil.openConnection() method
+                       
+In web.xml (make changes)
+  ...
+    <context-param>
+        <param-name>url</param-name>
+        <!--<param-value>jdbc:oracle:thin:@//localhost:1521/xe</param-value>-->
+        <param-value>jdbc:mysql://localhost:3306/blogsphere</param-value>
+    </context-param>
+    <context-param>
+        <param-name>username</param-name>
+        <!--<param-value>blogsphere</param-value>-->
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <param-name>password</param-name>
+        <!--<param-value>project</param-value>-->
+        <param-value>2507</param-value>
+    </context-param>
+  ...
+
+In  DBUtil.openConnection()
+    public static void openConnection(String url, String user, String password) {
+        if (con != null) return;
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, user, password);
+            System.out.println("BlogSphere Connection Build");
+        } catch (Exception ex) {
+            System.out.println("Error in opening Connection!");
+            ex.printStackTrace();
+        }
+    }
+
+
+Then Create the tables and triggers in MySQL
+-- Create database named blogsphere
+CREATE DATABASE blogsphere;
+
+-- Use the blogsphere database
+USE blogsphere;
+
+-- Create USERS table with user information
+CREATE TABLE USERS (
+  USEREMAIL VARCHAR(60) PRIMARY KEY,
+  USERNAME VARCHAR(30),
+  CONTACT BIGINT,
+  PASSWORD VARCHAR(20)
+);
+
+-- Create BLOGS table with blog details
+CREATE TABLE BLOGS (
+  BLOGID VARCHAR(20) PRIMARY KEY,
+  USEREMAIL VARCHAR(60),
+  TITLE VARCHAR(100),
+  CONTENT TEXT,
+  TIME DATETIME,
+  CATEGORY VARCHAR(20),
+  USERNAME VARCHAR(30),
+  LIKE_COUNT INT DEFAULT 0,
+  COMMENT_COUNT INT DEFAULT 0,
+  VIEWS INT DEFAULT 0,
+  MILLISECOND BIGINT,
+  FOREIGN KEY (USEREMAIL) REFERENCES USERS(USEREMAIL)
+);
+
+-- Create COMMENTS table with comments on blogs
+CREATE TABLE COMMENTS (
+  BLOGID VARCHAR(20),
+  USERID VARCHAR(60),
+  CONTENT VARCHAR(1000),
+  TIME DATETIME,
+  MILLISECOND BIGINT,
+  FOREIGN KEY (BLOGID) REFERENCES BLOGS(BLOGID),
+  FOREIGN KEY (USERID) REFERENCES USERS(USEREMAIL)
+);
+
+-- Create LIKES table for tracking likes on blogs
+CREATE TABLE LIKES (
+  BLOGID VARCHAR(20),
+  USERID VARCHAR(60),
+  FOREIGN KEY (BLOGID) REFERENCES BLOGS(BLOGID),
+  FOREIGN KEY (USERID) REFERENCES USERS(USEREMAIL)
+);
+
+-- Insert sample user data into USERS table
+INSERT INTO USERS (USEREMAIL, USERNAME, CONTACT, PASSWORD) VALUES
+  ('john@blogsphere.com', 'John Doe', 9876543210, '123'),
+  ('sara@blogsphere.com', 'Sara Lee', 9123456789, '123'),
+  ('alex@blogsphere.com', 'Alex Jones', 9234567890, '123'),
+  ('mike@blogsphere.com', 'Mike Smith', 9345678901, '123'),
+  ('emma@blogsphere.com', 'Emma Williams', 9456789012, '1234'),
+  ('prasantpoddar27@gmail.com', 'Prasant Chandra', 7870485583, '1234');
+
+-- Describe the structure of the BLOGS table
+DESC blogs;
+
+-- Set delimiter to // for multi-line trigger definition
+DELIMITER //
+
+-- Create trigger to update LIKE_COUNT on LIKE insert
+CREATE TRIGGER UPDATE_LIKE_COUNT_AFTER_INSERT
+  AFTER INSERT ON LIKES
+  FOR EACH ROW
+BEGIN
+  UPDATE BLOGS
+  SET LIKE_COUNT = LIKE_COUNT + 1
+  WHERE BLOGID = NEW.BLOGID;
+END;
+//
+
+-- Create trigger to update LIKE_COUNT on LIKE delete
+CREATE TRIGGER UPDATE_LIKE_COUNT_AFTER_DELETE
+  AFTER DELETE ON LIKES
+  FOR EACH ROW
+BEGIN
+  UPDATE BLOGS
+  SET LIKE_COUNT = LIKE_COUNT - 1
+  WHERE BLOGID = OLD.BLOGID;
+END;
+//
+
+-- Create trigger to update COMMENT_COUNT on COMMENT insert
+CREATE TRIGGER UPD_CMNT_CNT_INS
+  AFTER INSERT ON COMMENTS
+  FOR EACH ROW
+BEGIN
+  UPDATE BLOGS
+  SET COMMENT_COUNT = COMMENT_COUNT + 1
+  WHERE BLOGID = NEW.BLOGID;
+END;
+//
+
+-- Create trigger to update COMMENT_COUNT on COMMENT delete
+CREATE TRIGGER UPD_CMNT_CNT_DEL
+  AFTER DELETE ON COMMENTS
+  FOR EACH ROW
+BEGIN
+  UPDATE BLOGS
+  SET COMMENT_COUNT = COMMENT_COUNT - 1
+  WHERE BLOGID = OLD.BLOGID;
+END;
+//
+
+-- Reset delimiter back to semicolon
+DELIMITER ;
+
+-- Display all users from USERS table
+SELECT * FROM users;
+
+show tables;
